@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -34,3 +35,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+=======
+# Gestion-Dynamique-de-T-ches-et-Ressources-avec-Algorithmes-Prioritaires
+Cette application web permet de simuler l’allocation optimale de ressources à un ensemble de tâches en fonction de différentes méthodes d’ordonnancement (ex. : file de priorité). Elle a été développée avec Next.js pour le frontend et Django pour le backend (API REST), en utilisant Framer Motion pour les animations 
+>>>>>>> 34f4d811eabb515d1774a308c3a3dbc63b2aed3c
