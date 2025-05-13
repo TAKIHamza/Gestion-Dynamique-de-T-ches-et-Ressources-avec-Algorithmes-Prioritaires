@@ -1,7 +1,7 @@
 // frontend/services/allocationService.js
 
 export async function runAllocation(payload) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/simulate/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/allocate/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -14,6 +14,9 @@ export const AllocationProvider = ({ children }) => {
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
+ const reorderTasks = (newOrder) => {
+    setTasks(newOrder);
+  };
 
   const toggleTaskDone = (id) => {
     setTasks((prevTasks) =>
@@ -45,6 +48,7 @@ export const AllocationProvider = ({ children }) => {
         tasks,
         setTasks,
         addTask,
+        reorderTasks,
         deleteTask,
         resources,
         setResources,

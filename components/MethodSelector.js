@@ -24,7 +24,7 @@ const methods = [
     icon: <FaClock className="mr-2" /> 
   },
   { 
-    value: "shortest_job", 
+    value: "sjn", 
     label: "Plus court d'abord", 
     icon: <FaProjectDiagram className="mr-2" /> 
   }

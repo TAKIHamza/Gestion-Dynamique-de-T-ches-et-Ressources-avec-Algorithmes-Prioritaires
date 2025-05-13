@@ -4,9 +4,8 @@ import { motion } from "framer-motion";
 import { FaPlus, FaTasks } from "react-icons/fa";
 import { useAllocation } from "@/context/AllocationContext";
 
-export default function TaskForm() {
+export default function TaskForm({ onSuccess }) {
   const { addTask } = useAllocation();
-
   const [task, setTask] = useState("");
   const [priority, setPriority] = useState(1);
   const [duration, setDuration] = useState(1);
@@ -18,39 +17,55 @@ export default function TaskForm() {
       name: task,
       priority: parseInt(priority),
       duration: parseInt(duration),
-      done: false, // 👈 Nouvelle propriété
+      done: false,
     });
     setTask("");
     setPriority(1);
     setDuration(1);
+    if (onSuccess) onSuccess();
   };
 
   return (
     <motion.div
-      className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+      className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 overflow-hidden"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.2 }}
     >
-      <div className="flex items-center mb-4">
-        <div className="p-2 bg-blue-100 rounded-lg text-blue-600 mr-3">
+      <motion.div 
+        className="flex items-center mb-4"
+        initial={{ x: -10, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ delay: 0.1 }}
+      >
+        <div className="p-2 bg-cyan-100 rounded-lg text-cyan-600 mr-3">
           <FaTasks size={20} />
         </div>
         <h3 className="text-lg font-semibold text-gray-800">Ajouter une tâche</h3>
-      </div>
+      </motion.div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+        <motion.div
+          initial={{ x: -10, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
           <label className="block text-sm font-medium text-gray-700 mb-1">Nom de la tâche</label>
           <input
             type="text"
             value={task}
             onChange={(e) => setTask(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
             placeholder="Ex: Analyse des données"
           />
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          initial={{ x: -10, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
           <label className="block text-sm font-medium text-gray-700 mb-1">Priorité (1-10)</label>
           <input
             type="number"
@@ -58,27 +73,34 @@ export default function TaskForm() {
             max="10"
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
           />
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          initial={{ x: -10, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
           <label className="block text-sm font-medium text-gray-700 mb-1">Durée (heures)</label>
           <input
             type="number"
             min="1"
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
             placeholder="Ex: 5"
           />
-        </div>
+        </motion.div>
 
         <motion.button
           type="submit"
-          className="flex items-center justify-center w-full bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center justify-center w-full bg-cyan-600 text-white px-4 py-3 rounded-lg hover:bg-cyan-700 transition-colors"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
         >
           <FaPlus className="mr-2" />
           Ajouter la tâche
