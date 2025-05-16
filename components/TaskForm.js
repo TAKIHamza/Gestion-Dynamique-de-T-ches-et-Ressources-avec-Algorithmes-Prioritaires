@@ -4,24 +4,38 @@ import { motion } from "framer-motion";
 import { FaPlus, FaTasks } from "react-icons/fa";
 import { useAllocation } from "@/context/AllocationContext";
 
+const DOMAIN_OPTIONS = [
+  { value: "it", label: "Informatique" },
+  { value: "agriculture", label: "Agriculture" },
+  { value: "industrie", label: "Industrie" },
+  { value: "santé", label: "Santé" },
+  { value: "logistique", label: "Logistique" },
+];
+
 export default function TaskForm({ onSuccess }) {
   const { addTask } = useAllocation();
-  const [task, setTask] = useState("");
-  const [priority, setPriority] = useState(1);
-  const [duration, setDuration] = useState(1);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState(2);
+  const [requirement, setRequirement] = useState("");
+  const [domain, setDomain] = useState("it");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!task.trim()) return;
+    if (!title.trim()) return;
     addTask({
-      name: task,
+      title,
+      description,
       priority: parseInt(priority),
-      duration: parseInt(duration),
+      requirement,
+      domain,
       done: false,
     });
-    setTask("");
-    setPriority(1);
-    setDuration(1);
+    setTitle("");
+    setDescription("");
+    setPriority(2);
+    setRequirement("");
+    setDomain("it");
     if (onSuccess) onSuccess();
   };
 
@@ -33,12 +47,7 @@ export default function TaskForm({ onSuccess }) {
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 0.2 }}
     >
-      <motion.div 
-        className="flex items-center mb-4"
-        initial={{ x: -10, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.1 }}
-      >
+      <motion.div className="flex items-center mb-4">
         <div className="p-2 bg-cyan-100 rounded-lg text-cyan-600 mr-3">
           <FaTasks size={20} />
         </div>
@@ -46,61 +55,71 @@ export default function TaskForm({ onSuccess }) {
       </motion.div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <motion.div
-          initial={{ x: -10, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <label className="block text-sm font-medium text-gray-700 mb-1">Nom de la tâche</label>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Titre</label>
           <input
             type="text"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
-            placeholder="Ex: Analyse des données"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            placeholder="Titre de la tâche"
           />
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ x: -10, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          <label className="block text-sm font-medium text-gray-700 mb-1">Priorité (1-10)</label>
-          <input
-            type="number"
-            min="1"
-            max="10"
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            placeholder="Détails de la tâche"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Priorité</label>
+          <select
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
-          />
-        </motion.div>
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          >
+            <option value={1}>Haute</option>
+            <option value={2}>Moyenne</option>
+            <option value={3}>Basse</option>
+          </select>
+        </div>
 
-        <motion.div
-          initial={{ x: -10, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <label className="block text-sm font-medium text-gray-700 mb-1">Durée (heures)</label>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Besoin (ex : 10 unités)</label>
           <input
-            type="number"
-            min="1"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
-            placeholder="Ex: 5"
+            type="text"
+            value={requirement}
+            onChange={(e) => setRequirement(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            placeholder="Ex : 5kg, 2Go RAM..."
           />
-        </motion.div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Domaine</label>
+          <select
+            value={domain}
+            onChange={(e) => setDomain(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+          >
+            {DOMAIN_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <motion.button
           type="submit"
           className="flex items-center justify-center w-full bg-cyan-600 text-white px-4 py-3 rounded-lg hover:bg-cyan-700 transition-colors"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5 }}
         >
           <FaPlus className="mr-2" />
           Ajouter la tâche

@@ -92,26 +92,27 @@ export default function TaskList() {
                     />
                     
                     <div className="flex-1 min-w-0">
-                      <p
-                        className={`font-medium text-gray-800 truncate ${
-                          task.done ? "line-through text-gray-500" : ""
-                        }`}
-                      >
-                        {task.name}
-                      </p>
-                      <div className="flex flex-wrap gap-2 mt-1">
-                        <span className="px-2 py-1 bg-cyan-100 text-cyan-800 text-xs rounded-full whitespace-nowrap">
-                          Priorité: {task.priority}
-                        </span>
-                        <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full whitespace-nowrap">
-                          Durée: {task.duration}
-                        </span>
-                        {task.done && (
-                          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full whitespace-nowrap">
-                            Complétée
-                          </span>
-                        )}
-                      </div>
+                     <p className={`font-medium text-gray-800 truncate ${task.done ? "line-through text-gray-500" : ""}`}>
+  {task.title}
+</p>
+<p className="text-sm text-gray-600 mt-1">{task.description}</p>
+<div className="flex flex-wrap gap-2 mt-1">
+  <span className="px-2 py-1 bg-cyan-100 text-cyan-800 text-xs rounded-full whitespace-nowrap">
+    Priorité: {["", "Haute", "Moyenne", "Basse"][task.priority]}
+  </span>
+  <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full whitespace-nowrap">
+    Besoin: {task.requirement}
+  </span>
+  <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full whitespace-nowrap">
+    Domaine: {task.domain}
+  </span>
+  {task.done && (
+    <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full whitespace-nowrap">
+      Complétée
+    </span>
+  )}
+</div>
+
                     </div>
                   </div>
                   
