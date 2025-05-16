@@ -1,4 +1,4 @@
-// app/login/page.js
+
 "use client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -6,7 +6,7 @@ import { setCookie } from "cookies-next";
 import AuthForm from "@/components/AuthForm";
 import { loginUser } from "@/services/allocationService";
 import HomeButton from "@/components/HomeButton";
-
+ 
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);

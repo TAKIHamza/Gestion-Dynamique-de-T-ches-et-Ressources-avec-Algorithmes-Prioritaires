@@ -1,4 +1,3 @@
-// components/AuthForm.js
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -261,4 +260,4 @@ const AuthForm = ({ type, onSubmit, loading, error }) => {
   );
 };
 
-export default AuthForm;
+export default AuthForm; 
