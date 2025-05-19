@@ -17,13 +17,14 @@ export default function LoginPage() {
     setError("");
     
     try {
+      
       const response = await loginUser({
         email: formData.email,
         password: formData.password
       });
 
       // Stockage du token dans un cookie sécurisé
-      setCookie("auth_token", response.access_token || response.access, {
+      setCookie("auth_token", response.access || response.access, {
         maxAge: 60 * 60 * 24 * 7, // 1 semaine
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
@@ -33,8 +34,11 @@ export default function LoginPage() {
       // Redirection
       router.push("/dashboard");
     } catch (err) {
-      console.error("Erreur de connexion:", err);
-      setError(err.response?.data?.message || "Identifiants incorrects");
+         setError(
+      err.response?.data?.detail || 
+      err.response?.data?.message || 
+      "Identifiants incorrects"
+    );
     } finally {
       setLoading(false);
     }

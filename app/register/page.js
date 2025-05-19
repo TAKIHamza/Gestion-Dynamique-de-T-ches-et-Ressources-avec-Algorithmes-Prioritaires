@@ -21,7 +21,7 @@ export default function RegisterPage() {
 
     try {
       await registerUser({
-        name: formData.name,
+        username: formData.name,
         email: formData.email,
         password: formData.password
       });
@@ -29,8 +29,11 @@ export default function RegisterPage() {
       // Redirection vers la page de connexion avec un paramètre
       router.push("/login?registered=true");
     } catch (err) {
-      console.error("Erreur d'inscription:", err);
-      setError(err.response?.data?.message || "Erreur lors de l'inscription");
+       setError(
+      err.response?.data?.detail || 
+      err.response?.data?.message || 
+      "user existe"
+    );
     } finally {
       setLoading(false);
     }

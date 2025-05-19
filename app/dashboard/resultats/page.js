@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAllocation } from "@/context/AllocationContext";
 import MethodSelector from "@/components/MethodSelector";
 import ResultList from "@/components/ResultList";
-import { runAllocation } from "@/services/allocationService";
+import { runAllocation, assignResources } from "@/services/allocationService";
 import { motion } from "framer-motion";
 import { FaRocket, FaFileExport } from "react-icons/fa";
 import StatsPanel from "@/components/StatsPanel";
@@ -19,7 +19,15 @@ export default function ResultPage() {
     
     setIsLoading(true);
     try {
-      const response = await runAllocation({ demands, resources, method });
+      const formattedDemands = demands.map(d => ({
+    id: d.id, // 👈 ajouter explicitement
+    title: d.title,
+    description: d.description,
+    priority: d.priority,
+    is_done: d.is_done,
+    requirement: d.requirement,
+  }));
+      const response = await runAllocation({ demands:formattedDemands, resources, method });
       setResults(response);
     } catch (error) {
       console.error("Erreur:", error);
@@ -27,6 +35,25 @@ export default function ResultPage() {
       setIsLoading(false);
     }
   };
+  const handleAssign = async () => {
+  if (results.length === 0) return;
+
+  try {
+    const formatted = results.map((r) => ({
+      demand_id: r.demand_id,
+      demand_title: r.demand,
+      resource_id: r.resource_id || null,
+      resource_label: r.resource || null,
+    }));
+ console.log(formatted);
+    await assignResources(formatted);
+    alert("Les ressources ont été affectées avec succès !");
+  } catch (err) {
+    console.error(err);
+    alert("Erreur lors de l’affectation des ressources.");
+  }
+};
+
 
   const handleExport = () => {
     const headers = "Demande,Ressource,Méthode\n";
@@ -81,19 +108,30 @@ export default function ResultPage() {
                   whileTap={!isLoading && demands.length > 0 && resources.length > 0 ? { scale: 0.98 } : {}}
                 >
                   <FaRocket className="mr-2" />
-                  {isLoading ? "Calcul en cours..." : "Lancer la simulation"}
+                  {isLoading ? "Calcul en cours..." : "Lancer "}
                 </motion.button>
 
                 {results.length > 0 && (
-                  <motion.button
-                    onClick={handleExport}
-                    className="flex items-center px-4 py-3 bg-white border border-gray-200 rounded-lg font-medium text-gray-700 hover:bg-gray-50"
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <FaFileExport className="mr-2" />
-                    Exporter
-                  </motion.button>
+                 <>
+      <motion.button
+        onClick={handleExport}
+        className="flex items-center px-4 py-3 bg-white border border-gray-200 rounded-lg font-medium text-gray-700 hover:bg-gray-50"
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <FaFileExport className="mr-2" />
+        
+      </motion.button>
+
+      <motion.button
+        onClick={handleAssign}
+        className="flex items-center px-4 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700"
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        Affecter 
+      </motion.button>
+    </>
                 )}
               </div>
             </div>
@@ -108,6 +146,7 @@ export default function ResultPage() {
             resources={resources} 
             results={results} 
           />
+          
         </div>
       </div>
     </motion.div>

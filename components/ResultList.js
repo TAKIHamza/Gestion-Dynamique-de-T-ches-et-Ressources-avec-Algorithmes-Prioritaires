@@ -31,7 +31,7 @@ export default function ResultList({ results }) {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <span className="font-medium text-gray-700">{item.demand}</span>
+                    <span className="font-medium text-gray-700">{item.demand_title}</span>
                   </div>
                   <div className="flex items-center">
                     <motion.div
@@ -42,9 +42,9 @@ export default function ResultList({ results }) {
                     >
                       <div className="h-px w-8 bg-gray-300" />
                     </motion.div>
-                    {item.resource ? (
+                    {item.resource_label ? (
                       <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                        {item.resource}
+                        {item.resource_label}
                       </span>
                     ) : (
                       <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">

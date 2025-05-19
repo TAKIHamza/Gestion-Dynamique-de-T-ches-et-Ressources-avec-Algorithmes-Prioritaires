@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { logoutUser } from "@/services/allocationService";
+import { getCurrentUser, logoutUser } from "@/services/allocationService";
 import { useRouter } from "next/navigation";
 
 export default function Sidebar() {
@@ -21,6 +21,7 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [activeBg, setActiveBg] = useState("from-cyan-50 to-blue-100");
   const [user, setUser] = useState(null);
+    const [showLogout, setShowLogout] = useState(false);
   const router = useRouter();
 
   const navItems = [
@@ -46,11 +47,15 @@ export default function Sidebar() {
       activeBg: "bg-purple-600",
     }
   ];
+  
+  const toggleLogout = () => {
+    setShowLogout(!showLogout);
+  };
 
   useEffect(() => {
     // Récupérer les informations de l'utilisateur depuis localStorage
-    const userData = JSON.parse(localStorage.getItem("user"));
-    setUser(userData);
+    
+    setUser(getCurrentUser);
 
     const currentItem = navItems.find(item => pathname.startsWith(item.href));
     setActiveBg(currentItem?.bg || "from-cyan-50 to-blue-100");
@@ -154,42 +159,63 @@ export default function Sidebar() {
         </div>
 
         {/* User Info and Logout */}
-        <div className="mt-auto">
-          {user && (
-            <motion.div 
-              className="flex items-center mb-4 p-3 bg-white/50 rounded-lg"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-            >
-              <FaUserCircle className="text-gray-600 mr-3 text-2xl" />
-              <div>
-                <p className="font-medium text-gray-800">{user.name || user.email}</p>
-                <p className="text-xs text-gray-500">Connecté</p>
-              </div>
-            </motion.div>
-          )}
+ <div className="mt-auto border-t border-gray-200 pt-4">
+        {user && (
+          <motion.div 
+            className="flex items-center p-3 mb-2 bg-white rounded-lg shadow-sm cursor-pointer"
+            onClick={toggleLogout}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            whileHover={{ backgroundColor: "#f3f4f6" }}
+          >
+            <div className="relative">
+              <FaUserCircle className="text-gray-600 text-2xl" />
+              <span className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 border-2 border-white rounded-full"></span>
+            </div>
+            <div className="ml-3 overflow-hidden">
+              <p className="font-medium text-gray-800 truncate">{user.name || user.email}</p>
+              
+            </div>
+          </motion.div>
+        )}
 
-          <motion.button
-              onClick={handleLogout}
-              className="w-full flex items-center justify-center p-3 text-gray-600 hover:text-gray-800 transition-colors"
-              whileHover={{ 
-                x: -2,
-                transition: { duration: 0.2 }
-              }}
-              whileTap={{ 
-                x: 0,
-                transition: { duration: 0.1 }
-              }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-            >
-              <FaSignOutAlt className="mr-2" />
-              <span>logout</span>
-            </motion.button>
-        </div>
-
+        <AnimatePresence>
+ {showLogout && (
+  <motion.div
+    initial={{ opacity: 0, height: 0 }}
+    animate={{ opacity: 1, height: "auto" }}
+    exit={{ opacity: 0, height: 0 }}
+    transition={{ duration: 0.2 }}
+    className="overflow-hidden flex justify-center my-2"
+  >
+    <motion.button
+      onClick={handleLogout}
+      className={`group flex items-center justify-start w-11 h-11  rounded-full cursor-pointer relative overflow-hidden transition-all duration-200 shadow-lg hover:w-32 hover:rounded-lg active:translate-x-1 active:translate-y-1${
+              pathname.startsWith("/dashboard/taches") ? " bg-cyan-600" :
+              pathname.startsWith("/dashboard/ressources") ? " bg-green-600" :
+              pathname.startsWith("/dashboard/resultats") ? " bg-purple-600" :
+              "bg-cyan-100 text-cyan-600"
+            }`}
+      whileHover={{ 
+        scale: 1.05,
+        boxShadow: "0 4px 12px rgba(239, 68, 68, 0.3)"
+      }}
+      whileTap={{ 
+        scale: 0.95,
+      }}
+    >
+      <div className="flex items-center justify-center w-full transition-all duration-300 group-hover:justify-start group-hover:px-3">
+        <FaSignOutAlt className="w-4 h-4 text-white" />
+      </div>
+      <div className="absolute right-5 transform translate-x-full opacity-0 text-white text-sm font-semibold transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+        Logout
+      </div>
+    </motion.button>
+  </motion.div>
+)}
+        </AnimatePresence>
+      </div>
        
       </motion.aside>
     </>

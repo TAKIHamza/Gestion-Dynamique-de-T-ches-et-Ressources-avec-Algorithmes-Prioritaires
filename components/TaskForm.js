@@ -4,13 +4,7 @@ import { motion } from "framer-motion";
 import { FaPlus, FaTasks } from "react-icons/fa";
 import { useAllocation } from "@/context/AllocationContext";
 
-const DOMAIN_OPTIONS = [
-  { value: "it", label: "Informatique" },
-  { value: "agriculture", label: "Agriculture" },
-  { value: "industrie", label: "Industrie" },
-  { value: "santé", label: "Santé" },
-  { value: "logistique", label: "Logistique" },
-];
+
 
 export default function TaskForm({ onSuccess }) {
   const { addTask } = useAllocation();
@@ -18,7 +12,6 @@ export default function TaskForm({ onSuccess }) {
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState(2);
   const [requirement, setRequirement] = useState("");
-  const [domain, setDomain] = useState("it");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,14 +21,12 @@ export default function TaskForm({ onSuccess }) {
       description,
       priority: parseInt(priority),
       requirement,
-      domain,
       done: false,
     });
     setTitle("");
     setDescription("");
     setPriority(2);
     setRequirement("");
-    setDomain("it");
     if (onSuccess) onSuccess();
   };
 
@@ -90,30 +81,17 @@ export default function TaskForm({ onSuccess }) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Besoin (ex : 10 unités)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1 mt-4">Besoin (ex : 10 unités)</label>
           <input
             type="text"
             value={requirement}
             onChange={(e) => setRequirement(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            className="w-full px-4 py-2  border border-gray-300 rounded-lg"
             placeholder="Ex : 5kg, 2Go RAM..."
           />
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Domaine</label>
-          <select
-            value={domain}
-            onChange={(e) => setDomain(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-          >
-            {DOMAIN_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
+       
 
         <motion.button
           type="submit"
